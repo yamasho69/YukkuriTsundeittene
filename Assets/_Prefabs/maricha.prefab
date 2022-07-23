@@ -785,9 +785,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.02}
   serializedVersion: 2
-  m_Radius: 0.42
+  m_Radius: 0.41
 --- !u!114 &2594801216042532331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -801,6 +801,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
+  explosionPrefab: {fileID: 1715889091753918674, guid: 83b0742be3cf65d4f870b72f8156bcfd, type: 3}
 --- !u!1 &115138813108901922
 GameObject:
   m_ObjectHideFlags: 0

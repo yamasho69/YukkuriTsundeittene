@@ -13,10 +13,19 @@ public class GameSystem : MonoBehaviour
     bool isDragging;
     [SerializeField] List<Ball> removeBalls = new List<Ball>();
     Ball currentDraggingBall;//リストの最後のボール
+    int score;
+    [SerializeField] Text scoreText = default;
 
     void Start()
     {
-        StartCoroutine(ballGenerator.Spawns(40));
+        score = 0;
+        AddScore(0);
+        StartCoroutine(ballGenerator.Spawns(ParamsSO.Entity.initBallCount));
+    }
+
+    void AddScore(int point) {
+        score += point;
+        scoreText.text = "SCORE:" + score.ToString();
     }
 
     void Update()
@@ -43,8 +52,13 @@ public class GameSystem : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
         if (hit　&& hit.collider.GetComponent<Ball>()) {
             Ball ball = hit.collider.GetComponent<Ball>();
-            AddRemoveBall(ball);
-            isDragging = true;
+            //ボムなら周囲を含めて爆破
+            if(ball.IsBomb()) {//IsBombがtrueならボム
+                Explosion(ball);
+            } else {
+                AddRemoveBall(ball);
+                isDragging = true;
+            }
         }
     }
 
@@ -61,7 +75,7 @@ public class GameSystem : MonoBehaviour
                 //２つのボールの間の距離を測定
                 float distance = Vector2.Distance(ball.transform.position, currentDraggingBall.transform.position);
                 //距離が近ければ追加
-                if(distance < 1.5) {
+                if(distance < ParamsSO.Entity.ballDistance) {
                     AddRemoveBall(ball);
                 }
             }
@@ -74,9 +88,20 @@ public class GameSystem : MonoBehaviour
         //３つ以上ドラッグして、リストに加えていると消す
         if(removeCount >= 3) {
             for (int i = 0; i < removeCount; i++) {
-                Destroy(removeBalls[i].gameObject);
+                removeBalls[i].Explosion();
             }
+            StartCoroutine(ballGenerator.Spawns(removeCount));
+            AddScore(removeCount * ParamsSO.Entity.scorePoint);
+            //Debug.Log($"スコア:{removeCount*100}");
         }
+        //全てのremoveBallのサイズを戻す
+        for (int i = 0;i<removeCount;i++) {
+            removeBalls[i].transform.localScale = Vector3.one;
+            //リストに追加されたボールの色を戻す
+            removeBalls[i].GetComponent<SpriteRenderer>().color = Color.white;
+        }
+
+
         removeBalls.Clear();
         isDragging = false;
     }
@@ -85,7 +110,32 @@ public class GameSystem : MonoBehaviour
         currentDraggingBall = ball;
         //removeBallsがballをリストの中に持っていなかったら
         if(removeBalls.Contains(ball)== false) {
+            //リストに追加されたボールを大きくする
+            ball.transform.localScale = Vector3.one * ParamsSO.Entity.ballExpansion;
+            //リストに追加されたボールの色を変える
+            ball.GetComponent<SpriteRenderer>().color = Color.yellow;
             removeBalls.Add(ball);//リストに今のballを追加
         }
+    }
+
+    //bombによる爆破
+    void Explosion(Ball bomb) {
+        List<Ball> explosionList = new List<Ball>();
+        //ボムを中心に爆破するBallを集める
+        Collider2D[] hitObj = Physics2D.OverlapCircleAll(bomb.transform.position, ParamsSO.Entity.bombDistance);
+        for(int i = 0; i < hitObj.Length; i++) {
+            //Ballだったら爆破リストに追加する
+            Ball ball = hitObj[i].GetComponent<Ball>();
+            if (ball) {
+                explosionList.Add(ball);
+            }
+        }
+        //爆破する
+        int removeCount = explosionList.Count;
+            for (int i = 0; i < removeCount; i++) {
+                explosionList[i].Explosion();
+            }
+            StartCoroutine(ballGenerator.Spawns(removeCount));
+            AddScore(removeCount * ParamsSO.Entity.scorePoint);
     }
 }
