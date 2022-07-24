@@ -15,21 +15,51 @@ public class GameSystem : MonoBehaviour
     Ball currentDraggingBall;//リストの最後のボール
     int score;
     [SerializeField] Text scoreText = default;
+    [SerializeField] GameObject pointEffectPrefab = default;
+
+    int timeCount;
+    [SerializeField] Text timerText = default;
+
+    [SerializeField] GameObject resultPanel = default;
+    bool gameOver;
 
     void Start()
     {
         score = 0;
         AddScore(0);
         StartCoroutine(ballGenerator.Spawns(ParamsSO.Entity.initBallCount));
+        timeCount = ParamsSO.Entity.initialTime;
+        timerText.text = "TIME:" + timeCount.ToString();
+        StartCoroutine(CountDown());
     }
 
+    //カウントダウン(timeCountを1秒毎に小さくしていく)
+    IEnumerator CountDown() {
+        while (timeCount > 0) {
+            yield return new WaitForSeconds(1);
+            timeCount--;
+            timerText.text = "TIME:" + timeCount.ToString();
+        }
+        gameOver = true;
+        resultPanel.SetActive(true);
+        yield return null;
+    }
     void AddScore(int point) {
         score += point;
         scoreText.text = "SCORE:" + score.ToString();
     }
 
+    //リトライボタン押下
+    public void OnRetryButton() {
+        SceneManager.LoadScene("Main");
+    }
+
     void Update()
     {
+        //ゲームオーバー字はドラッグでの処理を行わない
+        if (gameOver) {
+            return;
+        }
         //右クリックを押し込んだ時
         if (Input.GetMouseButtonDown(0)) {
             OnDragBegin();
@@ -91,7 +121,9 @@ public class GameSystem : MonoBehaviour
                 removeBalls[i].Explosion();
             }
             StartCoroutine(ballGenerator.Spawns(removeCount));
-            AddScore(removeCount * ParamsSO.Entity.scorePoint);
+            int score = removeCount * ParamsSO.Entity.scorePoint;
+            AddScore(score);
+            SpawnPointEffect(removeBalls[removeBalls.Count-1].transform.position, score);
             //Debug.Log($"スコア:{removeCount*100}");
         }
         //全てのremoveBallのサイズを戻す
@@ -136,6 +168,14 @@ public class GameSystem : MonoBehaviour
                 explosionList[i].Explosion();
             }
             StartCoroutine(ballGenerator.Spawns(removeCount));
-            AddScore(removeCount * ParamsSO.Entity.scorePoint);
+            int score = removeCount * ParamsSO.Entity.scorePoint;
+            AddScore(score);
+            SpawnPointEffect(bomb.transform.position, score);
+    }
+
+    void SpawnPointEffect(Vector2 position, int score) {
+        GameObject effectObj = Instantiate(pointEffectPrefab,position,Quaternion.identity);
+        PointEffect pointEffect = effectObj.GetComponent<PointEffect>();
+        pointEffect.Show(score);
     }
 }

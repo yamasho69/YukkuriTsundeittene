@@ -23,7 +23,7 @@ public class BallGenerator : MonoBehaviour
 
             //もしボムならballID = -1
             //それ以外は今までと同じ
-            if (Random.Range(0, 100) < 3) {//3%の確率でtrueになる
+            if (Random.Range(0, 100) < 2) {//2%の確率でtrueになる
                 ballID = -1;
                 ball.GetComponent<SpriteRenderer>().sprite = bombSprite;
             } else {

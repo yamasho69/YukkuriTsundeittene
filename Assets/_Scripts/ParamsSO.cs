@@ -20,6 +20,8 @@ public class ParamsSO : ScriptableObject
 
     [Header("ボムの有効範囲")][Range(1,10)]public float bombDistance;
 
+    [Header("制限時間の初期値")] public int initialTime;
+
     //MyScriptableObjectが保存してある場所のパス
     public const string PATH = "ParamsSO";
 
