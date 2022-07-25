@@ -15,11 +15,45 @@ public class SoundManager : MonoBehaviour
 
     //BGM
     [SerializeField] AudioSource audioSourceBGM = default;
+    [SerializeField] AudioClip [] bgmClips = default;
 
-    [SerializeField] AudioClip audioClip = default;
+    //SE
+    //BGM
+    [SerializeField] AudioSource audioSourceSE = default;
+    [SerializeField] AudioClip[] seClips = default;
 
-    public void PlayBGM() {
-        audioSourceBGM.clip = audioClip;
+    public static SoundManager instance;
+
+    //ƒVƒ“ƒOƒ‹ƒgƒ“‰Â
+    private void Awake() {
+        if(instance == null) {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        } else {
+            Destroy(gameObject);
+        }
+    }
+
+    public enum BGM {
+        Title,
+        Main
+    }
+
+    public enum SE {
+        Totch,
+        Destroy
+    }
+
+    private void Start() {
+        PlayBGM(BGM.Main);
+    }
+
+    public void PlayBGM(BGM bgm) {
+        audioSourceBGM.clip = bgmClips[(int)bgm];
         audioSourceBGM.Play();
+    }
+
+    public void PlaySE(SE se) {
+        audioSourceSE.PlayOneShot(seClips[(int)se]);
     }
 }

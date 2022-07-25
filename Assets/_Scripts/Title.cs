@@ -18,6 +18,7 @@ public class Title : MonoBehaviour
     new Vector3(0, 2.5f, 0), // 移動終了地点
     1f);                  // 演出時間
         StartCoroutine(TitleStart());
+        SoundManager.instance.PlayBGM(SoundManager.BGM.Title);//サウンドマネージャーのTitleのBGMを流す
     }
 
     IEnumerator TitleStart() {
@@ -25,6 +26,7 @@ public class Title : MonoBehaviour
         buttons.SetActive(true);
         yield return null;
     }
+
 
     public void OnStartButton() {
         SceneManager.LoadScene("Main");

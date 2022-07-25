@@ -28,6 +28,7 @@ public class GameSystem : MonoBehaviour
         score = 0;
         AddScore(0);
         StartCoroutine(ballGenerator.Spawns(ParamsSO.Entity.initBallCount));
+        SoundManager.instance.PlayBGM(SoundManager.BGM.Main);//サウンドマネージャーのMainのBGMを流す
         timeCount = ParamsSO.Entity.initialTime;
         timerText.text = "TIME:" + timeCount.ToString();
         StartCoroutine(CountDown());
@@ -124,6 +125,7 @@ public class GameSystem : MonoBehaviour
             int score = removeCount * ParamsSO.Entity.scorePoint;
             AddScore(score);
             SpawnPointEffect(removeBalls[removeBalls.Count-1].transform.position, score);
+            SoundManager.instance.PlaySE(SoundManager.SE.Destroy);
             //Debug.Log($"スコア:{removeCount*100}");
         }
         //全てのremoveBallのサイズを戻す
@@ -147,6 +149,7 @@ public class GameSystem : MonoBehaviour
             //リストに追加されたボールの色を変える
             ball.GetComponent<SpriteRenderer>().color = Color.yellow;
             removeBalls.Add(ball);//リストに今のballを追加
+            SoundManager.instance.PlaySE(SoundManager.SE.Totch);
         }
     }
 
@@ -171,6 +174,7 @@ public class GameSystem : MonoBehaviour
             int score = removeCount * ParamsSO.Entity.scorePoint;
             AddScore(score);
             SpawnPointEffect(bomb.transform.position, score);
+            SoundManager.instance.PlaySE(SoundManager.SE.Destroy);
     }
 
     void SpawnPointEffect(Vector2 position, int score) {
