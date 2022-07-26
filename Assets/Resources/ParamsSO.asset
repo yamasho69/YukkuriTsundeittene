@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f6ae884fbefa5547afa825e6f460566, type: 3}
   m_Name: ParamsSO
   m_EditorClassIdentifier: 
-  initBallCount: 50
+  initBallCount: 70
   scorePoint: 100
   ballDistance: 1.5
   ballExpansion: 1.4
   bombDistance: 1.5
-  initialTime: 30
+  initialTime: 60

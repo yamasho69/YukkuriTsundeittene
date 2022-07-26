@@ -15,10 +15,12 @@ public class BallGenerator : MonoBehaviour
     //ƒ{ƒ€‚Ì‰æ‘œ
     [SerializeField] Sprite bombSprite = default;
 
+    [SerializeField] Transform balls;
+
     public IEnumerator Spawns(int count) {
         for (int i = 0; i < count; i++) {
             Vector2 pos = new Vector2(Random.Range(-0.2f, 0.2f), 8f);
-            GameObject ball = Instantiate(ballprefab, pos, Quaternion.identity);
+            GameObject ball = Instantiate(ballprefab, pos, Quaternion.identity,balls);
             int ballID = Random.Range(0, ballSprites.Length);//-1‚Íƒ{ƒ€
 
             //‚à‚µƒ{ƒ€‚È‚çballID = -1
