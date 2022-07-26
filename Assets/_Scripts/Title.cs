@@ -12,6 +12,7 @@ public class Title : MonoBehaviour
     public GameObject titleText;
     public GameObject buttons;
     public GameObject creditWindow;
+    public GameObject manualWindow;
 
     private void Start() {
         titleText.transform.DOMove(
@@ -36,5 +37,11 @@ public class Title : MonoBehaviour
         if (creditWindow.activeSelf) {
             creditWindow.SetActive(false);
         } else {creditWindow.SetActive(true);}
+    }
+
+    public void OnManualButton() {
+        if (manualWindow.activeSelf) {
+            manualWindow.SetActive(false);
+        } else { manualWindow.SetActive(true); }
     }
 }
