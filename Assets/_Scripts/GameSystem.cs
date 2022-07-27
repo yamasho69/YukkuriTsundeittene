@@ -23,12 +23,55 @@ public class GameSystem : MonoBehaviour
     [SerializeField] GameObject resultPanel = default;
     bool gameOver;
 
+    //これ以降は自分で追加
+    [SerializeField] AudioSource bgmAudioSource;
+    [SerializeField] AudioSource seAudioSource;
+    public Text stageName;
+    [SerializeField] Text musicName;
+    [SerializeField] Image backGround;
+    [SerializeField] Text countDownText;
+    [SerializeField] AudioClip countDownSE;
+
+
+    int charaNumber; //0=霊夢、1＝魔理沙、2＝アリス、3＝パチュリー、4＝妖夢、5＝橙 
+    [Header("背景。0霊、1魔、2ア、3パ、4妖、5橙 ")] public Sprite[] backGrounds;//Imageと勘違い。画像を配列に入れる場合はSprite
+    [Header("ステージ名。0霊、1魔、2ア、3パ、4妖、5橙 ")] public String[] stageNames;//Textと勘違い。自分で打ち込むのはString
+    [Header("曲名。0霊、1魔、2ア、3パ、4妖、5橙 ")] public String[] musicNames;//同上
+    [Header("BGM。0霊、1魔、2ア、3パ、4妖、5橙 ")] public AudioClip[] musics;
+    [Header("ボイス「ゆ」。0霊、1魔、2ア、3パ、4妖、5橙 ")] public AudioClip[] yuVoices;
+    [Header("ボイス「いち」。0霊、1魔、2ア、3パ、4妖、5橙 ")] public AudioClip[] ichiVoices;
+    [Header("ボイス「に」。0霊、1魔、2ア、3パ、4妖、5橙 ")] public AudioClip[] niVoices;
+    [Header("ボイス「さん」。0霊、1魔、2ア、3パ、4妖、5橙 ")] public AudioClip[] sanVoices;
+    [Header("ボイス「よん」。0霊、1魔、2ア、3パ、4妖、5橙 ")] public AudioClip[] yonVoices;
+    [Header("ボイス「ご」。0霊、1魔、2ア、3パ、4妖、5橙 ")] public AudioClip[] goVoices;
+    [Header("ボイス「すたーと」。0霊、1魔、2ア、3パ、4妖、5橙 ")] public AudioClip[] startVoices;
+    [Header("ボイス「おわり」。0霊、1魔、2ア、3パ、4妖、5橙 ")] public AudioClip[] owariVoices;
+    [Header("ボイス「消える」。0霊、1魔、2ア、3パ、4妖、5橙 ")] public AudioClip[] kieruVoices;
+
+    private void Awake() {
+        charaNumber = UnityEngine.Random.Range(0, 5);
+        //ステージ名
+        stageName.text = "Stage:"+ stageNames[charaNumber];
+        //BGM名
+        musicName.text = "♪" + musicNames[charaNumber];
+        // 背景名
+        backGround.sprite = backGrounds[charaNumber];
+        
+        //BGM差し替え
+        bgmAudioSource.clip = musics[charaNumber];//BGMの再生はオーディオソースのclipを差し替える→オーディオソースを再生の流れ。
+    }
+
+
     void Start()
     {
         score = 0;
         AddScore(0);
         StartCoroutine(ballGenerator.Spawns(ParamsSO.Entity.initBallCount));
-        SoundManager.instance.PlayBGM(SoundManager.BGM.Main);//サウンドマネージャーのMainのBGMを流す
+        //SoundManager.instance.PlayBGM(SoundManager.BGM.Main);//サウンドマネージャーのMainのBGMを流す
+        
+        //BGM再生
+        bgmAudioSource.Play();
+
         timeCount = ParamsSO.Entity.initialTime;
         timerText.text = "TIME:" + timeCount.ToString();
         StartCoroutine(CountDown());
@@ -36,6 +79,20 @@ public class GameSystem : MonoBehaviour
 
     //カウントダウン(timeCountを1秒毎に小さくしていく)
     IEnumerator CountDown() {
+        yield return new WaitForSeconds(1);
+        countDownText.text = "3";
+        seAudioSource.PlayOneShot(countDownSE);
+        yield return new WaitForSeconds(1);
+        countDownText.text = "2";
+        seAudioSource.PlayOneShot(countDownSE);
+        yield return new WaitForSeconds(1);
+        countDownText.text = "1";
+        seAudioSource.PlayOneShot(countDownSE);
+        yield return new WaitForSeconds(1);
+        //すたーと　ボイス再生
+        seAudioSource.PlayOneShot(startVoices[charaNumber]);
+        countDownText.text = "";
+
         while (timeCount > 0) {
             yield return new WaitForSeconds(1);
             timeCount--;
@@ -125,7 +182,9 @@ public class GameSystem : MonoBehaviour
             int score = removeCount * ParamsSO.Entity.scorePoint;
             AddScore(score);
             SpawnPointEffect(removeBalls[removeBalls.Count-1].transform.position, score);
-            SoundManager.instance.PlaySE(SoundManager.SE.Destroy);
+            //SoundManager.instance.PlaySE(SoundManager.SE.Destroy);
+            //きえる　ボイス再生
+            seAudioSource.PlayOneShot(kieruVoices[charaNumber]);
             //Debug.Log($"スコア:{removeCount*100}");
         }
         //全てのremoveBallのサイズを戻す
@@ -149,7 +208,9 @@ public class GameSystem : MonoBehaviour
             //リストに追加されたボールの色を変える
             ball.GetComponent<SpriteRenderer>().color = Color.yellow;
             removeBalls.Add(ball);//リストに今のballを追加
-            SoundManager.instance.PlaySE(SoundManager.SE.Totch);
+            //SoundManager.instance.PlaySE(SoundManager.SE.Totch);
+            //ゆ　ボイス再生
+            seAudioSource.PlayOneShot(yuVoices[charaNumber]);
         }
     }
 
@@ -174,7 +235,9 @@ public class GameSystem : MonoBehaviour
             int score = removeCount * ParamsSO.Entity.scorePoint;
             AddScore(score);
             SpawnPointEffect(bomb.transform.position, score);
-            SoundManager.instance.PlaySE(SoundManager.SE.Destroy);
+        //SoundManager.instance.PlaySE(SoundManager.SE.Destroy);
+        //きえる　ボイス再生
+        seAudioSource.PlayOneShot(kieruVoices[charaNumber]);
     }
 
     void SpawnPointEffect(Vector2 position, int score) {
