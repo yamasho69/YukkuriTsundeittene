@@ -21,7 +21,7 @@ public class GameSystem : MonoBehaviour
     [SerializeField] Text timerText = default;
 
     [SerializeField] GameObject resultPanel = default;
-    bool gameOver;
+    bool gameOver = true;
 
     //これ以降は自分で追加
     [SerializeField] AudioSource bgmAudioSource;
@@ -31,6 +31,7 @@ public class GameSystem : MonoBehaviour
     [SerializeField] Image backGround;
     [SerializeField] Text countDownText;
     [SerializeField] AudioClip countDownSE;
+    [SerializeField] GameObject spinButton;
 
 
     int charaNumber; //0=霊夢、1＝魔理沙、2＝アリス、3＝パチュリー、4＝妖夢、5＝橙 
@@ -49,7 +50,7 @@ public class GameSystem : MonoBehaviour
     [Header("ボイス「消える」。0霊、1魔、2ア、3パ、4妖、5橙 ")] public AudioClip[] kieruVoices;
 
     private void Awake() {
-        charaNumber = UnityEngine.Random.Range(0, 5);
+        charaNumber = UnityEngine.Random.Range(0, 6); //この引数で０～５　https://pandoraxssscan-929.hatenablog.com/entry/2020/10/12/224414
         //ステージ名
         stageName.text = "Stage:"+ stageNames[charaNumber];
         //BGM名
@@ -94,10 +95,37 @@ public class GameSystem : MonoBehaviour
         countDownText.text = "";
 
         while (timeCount > 0) {
+            gameOver = false;//ゲームオーバー状態を解除、ゆっくりを触れるようにする
+            spinButton.SetActive(true);
             yield return new WaitForSeconds(1);
             timeCount--;
             timerText.text = "TIME:" + timeCount.ToString();
+            if (timeCount == 5) {
+                //ご　ボイス再生
+                seAudioSource.PlayOneShot(goVoices[charaNumber]);
+            }
+            if (timeCount == 4) {
+                //よん　ボイス再生
+                seAudioSource.PlayOneShot(yonVoices[charaNumber]);
+            }
+            if (timeCount == 3) {
+                //さん　ボイス再生
+                seAudioSource.PlayOneShot(sanVoices[charaNumber]);
+            }
+            if (timeCount == 2) {
+                //に　ボイス再生
+                seAudioSource.PlayOneShot(niVoices[charaNumber]);
+            }
+            if (timeCount == 1) {
+                //いち　ボイス再生
+                seAudioSource.PlayOneShot(ichiVoices[charaNumber]);
+            }
+
         }
+        //おわり　ボイス再生
+        seAudioSource.PlayOneShot(owariVoices[charaNumber]);
+        timerText.text = "TIME:0";
+        spinButton.SetActive(false);
         gameOver = true;
         resultPanel.SetActive(true);
         yield return null;
@@ -181,6 +209,7 @@ public class GameSystem : MonoBehaviour
             StartCoroutine(ballGenerator.Spawns(removeCount));
             int score = removeCount * ParamsSO.Entity.scorePoint;
             AddScore(score);
+            timeCount += 2*(removeCount - 3)-1; //4つ以上連結させると残り時間ボーナス。4つで1秒、5つで3秒、6つで5秒…と増える
             SpawnPointEffect(removeBalls[removeBalls.Count-1].transform.position, score);
             //SoundManager.instance.PlaySE(SoundManager.SE.Destroy);
             //きえる　ボイス再生

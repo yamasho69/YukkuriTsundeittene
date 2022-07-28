@@ -17,4 +17,4 @@ MonoBehaviour:
   ballDistance: 1.5
   ballExpansion: 1.4
   bombDistance: 1.5
-  initialTime: 60
+  initialTime: 20

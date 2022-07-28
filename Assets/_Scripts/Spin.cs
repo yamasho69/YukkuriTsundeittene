@@ -10,15 +10,23 @@ using DG.Tweening;
 public class Spin : MonoBehaviour
 {
     public GameObject spinBar;
+    bool canPushButton = true;
+    public AudioClip spinSE;
+    public AudioSource audioSource;
 
     public void SpinStart()
     {
-        spinBar.SetActive(true);
-        spinBar.transform.DORotate(new Vector3(0, 0, 360), 2, RotateMode.WorldAxisAdd);  //ワールド軸に対して
-        Invoke("Vanish", 2.0f);
+        if (canPushButton) {
+            canPushButton = false;
+            audioSource.PlayOneShot(spinSE);
+            spinBar.SetActive(true);
+            spinBar.transform.DORotate(new Vector3(0, 0, 360), 2, RotateMode.WorldAxisAdd);  //ワールド軸に対して
+            Invoke("Vanish", 2.0f);
+        }
     }
 
     void Vanish() {
         spinBar.SetActive(false);
+        canPushButton = true;
     }
 }
