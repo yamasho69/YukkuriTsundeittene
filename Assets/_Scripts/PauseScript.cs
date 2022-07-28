@@ -38,8 +38,8 @@ public class PauseScript : MonoBehaviour{
             pauseEffect.SetActive(true);
             if (joyStick) {//ジョイスティックがある場合
                 joyStick.SetActive(false);
-                var ab = joyStick.GetComponent<FixedJoystick>();
-                ab.OnPointerUp(null);//ドラッグを終了したことにする
+                //var ab = joyStick.GetComponent<FixedJoystick>();
+                //ab.OnPointerUp(null);//ドラッグを終了したことにする
             }
         }
     }

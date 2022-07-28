@@ -30,8 +30,12 @@ public class GameSystem : MonoBehaviour
     [SerializeField] Text musicName;
     [SerializeField] Image backGround;
     [SerializeField] Text countDownText;
+    [SerializeField] Text resultScoreText;
     [SerializeField] AudioClip countDownSE;
-    [SerializeField] GameObject spinButton;
+    [SerializeField] GameObject Buttons;
+    int highScore;
+    [SerializeField] Text highScoreText;
+    [SerializeField] GameObject highScoreHyoji;
 
 
     int charaNumber; //0=霊夢、1＝魔理沙、2＝アリス、3＝パチュリー、4＝妖夢、5＝橙 
@@ -57,7 +61,11 @@ public class GameSystem : MonoBehaviour
         musicName.text = "♪" + musicNames[charaNumber];
         // 背景名
         backGround.sprite = backGrounds[charaNumber];
-        
+        // HighScore というキー名のデータをロード.キーが存在しなかったら 0 を返す.
+        highScore = PlayerPrefs.GetInt("HighScore", 0);
+        //ハイスコア表示
+        highScoreText.text = "HIGHSCORE:" + highScore;
+
         //BGM差し替え
         bgmAudioSource.clip = musics[charaNumber];//BGMの再生はオーディオソースのclipを差し替える→オーディオソースを再生の流れ。
     }
@@ -96,7 +104,7 @@ public class GameSystem : MonoBehaviour
 
         while (timeCount > 0) {
             gameOver = false;//ゲームオーバー状態を解除、ゆっくりを触れるようにする
-            spinButton.SetActive(true);
+            Buttons.SetActive(true);
             yield return new WaitForSeconds(1);
             timeCount--;
             timerText.text = "TIME:" + timeCount.ToString();
@@ -125,9 +133,15 @@ public class GameSystem : MonoBehaviour
         //おわり　ボイス再生
         seAudioSource.PlayOneShot(owariVoices[charaNumber]);
         timerText.text = "TIME:0";
-        spinButton.SetActive(false);
+        resultScoreText.text = score+"点";
+        Buttons.SetActive(false);
         gameOver = true;
         resultPanel.SetActive(true);
+        if (score > highScore) {
+            highScoreHyoji.SetActive(true);//highScoreが更新されていたら表示
+            PlayerPrefs.SetInt("HighScore", score);//scoreをPrefsにセーブ
+            PlayerPrefs.Save();//https://futabazemi.net/unity/high_score/
+        }
         yield return null;
     }
     void AddScore(int point) {
@@ -137,7 +151,16 @@ public class GameSystem : MonoBehaviour
 
     //リトライボタン押下
     public void OnRetryButton() {
+        gameOver = true;//シーン遷移中、少しゆっくりに反応してボイスが出るため
         SceneManager.LoadScene("Main");
+        Time.timeScale = 1;//ポーズ画面から選択したとき用
+    }
+
+    //タイトルボタン押下
+    public void OnTitleButton() {
+        gameOver = true;//シーン遷移中、少しゆっくりに反応してボイスが出るため
+        SceneManager.LoadScene("Title");
+        Time.timeScale = 1;//ポーズ画面から選択したとき用
     }
 
     void Update()
