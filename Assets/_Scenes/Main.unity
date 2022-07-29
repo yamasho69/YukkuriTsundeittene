@@ -557,6 +557,7 @@ MonoBehaviour:
   removeBalls: []
   scoreText: {fileID: 1741507712}
   pointEffectPrefab: {fileID: 678604203303786911, guid: 7d80fed00b87b504984a41f6f98504b1, type: 3}
+  timeEffectPrefab: {fileID: 678604203303786911, guid: 825dac30d0937fa44a478248853c80f7, type: 3}
   timerText: {fileID: 817289958}
   resultPanel: {fileID: 1583633211}
   bgmAudioSource: {fileID: 338902068}
@@ -689,7 +690,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 0.3
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -1379,7 +1380,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 10, y: -10}
   m_UseGraphicAlpha: 1
 --- !u!114 &704187637
@@ -1864,7 +1865,7 @@ RectTransform:
   m_GameObject: {fileID: 991203898}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1741507711}
   - {fileID: 616738815}
@@ -3503,7 +3504,7 @@ RectTransform:
   m_GameObject: {fileID: 2095188767}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1547527378}
   m_Father: {fileID: 2049186572}

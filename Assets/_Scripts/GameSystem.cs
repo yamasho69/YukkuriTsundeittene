@@ -17,6 +17,8 @@ public class GameSystem : MonoBehaviour
     [SerializeField] Text scoreText = default;
     [SerializeField] GameObject pointEffectPrefab = default;
 
+    [SerializeField] GameObject timeEffectPrefab = default; //追加時間表示用
+
     int timeCount;
     [SerializeField] Text timerText = default;
 
@@ -232,9 +234,13 @@ public class GameSystem : MonoBehaviour
             StartCoroutine(ballGenerator.Spawns(removeCount));
             int score = removeCount * ParamsSO.Entity.scorePoint;
             AddScore(score);
-            timeCount += 2*(removeCount - 3)-1; //4つ以上連結させると残り時間ボーナス。4つで1秒、5つで3秒、6つで5秒…と増える
+            int addTime = 2 * (removeCount - 3) - 1; //4つ以上連結させると残り時間ボーナス。4つで1秒、5つで3秒、6つで5秒…と増える
+            timeCount += addTime; 
             SpawnPointEffect(removeBalls[removeBalls.Count-1].transform.position, score);
             //SoundManager.instance.PlaySE(SoundManager.SE.Destroy);
+            if (addTime > 0) {
+                SpawnTimeEffect(removeBalls[removeBalls.Count - 1].transform.position,addTime);
+            }
             //きえる　ボイス再生
             seAudioSource.PlayOneShot(kieruVoices[charaNumber]);
             //Debug.Log($"スコア:{removeCount*100}");
@@ -296,5 +302,10 @@ public class GameSystem : MonoBehaviour
         GameObject effectObj = Instantiate(pointEffectPrefab,position,Quaternion.identity);
         PointEffect pointEffect = effectObj.GetComponent<PointEffect>();
         pointEffect.Show(score);
+    }
+    void SpawnTimeEffect(Vector2 position, int addtime) {
+        GameObject effectObj = Instantiate(timeEffectPrefab, position, Quaternion.identity);
+        PointEffect pointEffect = effectObj.GetComponent<PointEffect>();
+        pointEffect.Show(addtime);
     }
 }

@@ -11,7 +11,11 @@ public class PointEffect : MonoBehaviour
 {
     [SerializeField] Text text = default;
     public void Show(int score) {
-        text.text = score.ToString();
+        if (score >= 300) {
+            text.text = score.ToString() + "ì_";
+        } else {
+            text.text = "Å{" + score.ToString() + "ïb";
+        }
         StartCoroutine(MoveUp());
     }
 
