@@ -5,6 +5,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NCMB;
+
 //using DG.Tweening;
 
 public class GameSystem : MonoBehaviour
@@ -39,6 +41,7 @@ public class GameSystem : MonoBehaviour
     [SerializeField] Text highScoreText;
     [SerializeField] GameObject highScoreHyoji;
     public bool atsumaru;//ゲームアツマールに投稿する場合はオンにする。
+    public bool onlineRanking;//オンラインランキングをオンにする場合。
 
 
     int charaNumber; //0=霊夢、1＝魔理沙、2＝アリス、3＝パチュリー、4＝妖夢、5＝橙 
@@ -155,9 +158,17 @@ public class GameSystem : MonoBehaviour
                 PlayerPrefsAtsumaru.Save();//
                 Atsumaru.scoreboards.setRecord("1", score.ToString());//スコア送信
                 Atsumaru.scoreboards.display("1");//https://goma980.blogspot.com/2021/03/webGLpg.html
-            } else { }
-                PlayerPrefs.SetInt("HighScore", score);//scoreをPrefsにセーブ
-                PlayerPrefs.Save();//https://futabazemi.net/unity/high_score/}
+            } else if(onlineRanking){
+                // Type == Number の場合
+                naichilab.RankingLoader.Instance.SendScoreAndShowRanking(score);
+
+                // Type == Time の場合
+                var millsec = 123456;
+                var timeScore = new System.TimeSpan(0, 0, 0, 0, millsec);
+                naichilab.RankingLoader.Instance.SendScoreAndShowRanking(timeScore);
+            }
+            PlayerPrefs.SetInt("HighScore", score);//scoreをPrefsにセーブ
+            PlayerPrefs.Save();//https://futabazemi.net/unity/high_score/}
         }
         yield return null;
     }
