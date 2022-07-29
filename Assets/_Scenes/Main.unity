@@ -571,6 +571,7 @@ MonoBehaviour:
   Buttons: {fileID: 1721100598}
   highScoreText: {fileID: 616738812}
   highScoreHyoji: {fileID: 927222111}
+  atsumaru: 1
   backGrounds:
   - {fileID: 21300000, guid: f85303a2e402a3443b78f129dc7dde1f, type: 3}
   - {fileID: 21300000, guid: dd024636f20a0b04094fbc9196adc134, type: 3}

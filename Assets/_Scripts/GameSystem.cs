@@ -38,6 +38,7 @@ public class GameSystem : MonoBehaviour
     int highScore;
     [SerializeField] Text highScoreText;
     [SerializeField] GameObject highScoreHyoji;
+    public bool atsumaru;//ゲームアツマールに投稿する場合はオンにする。
 
 
     int charaNumber; //0=霊夢、1＝魔理沙、2＝アリス、3＝パチュリー、4＝妖夢、5＝橙 
@@ -63,8 +64,16 @@ public class GameSystem : MonoBehaviour
         musicName.text = "♪" + musicNames[charaNumber];
         // 背景名
         backGround.sprite = backGrounds[charaNumber];
-        // HighScore というキー名のデータをロード.キーが存在しなかったら 0 を返す.
-        highScore = PlayerPrefs.GetInt("HighScore", 0);
+
+        if (atsumaru) {
+            // アツマール用
+            highScore = PlayerPrefsAtsumaru.GetInt("HighScore", 0);
+        } else {
+            // HighScore というキー名のデータをロード.キーが存在しなかったら 0 を返す.
+            highScore = PlayerPrefs.GetInt("HighScore", 0);
+        }
+
+
         //ハイスコア表示
         highScoreText.text = "HIGHSCORE:" + highScore;
 
@@ -141,8 +150,14 @@ public class GameSystem : MonoBehaviour
         resultPanel.SetActive(true);
         if (score > highScore) {
             highScoreHyoji.SetActive(true);//highScoreが更新されていたら表示
-            PlayerPrefs.SetInt("HighScore", score);//scoreをPrefsにセーブ
-            PlayerPrefs.Save();//https://futabazemi.net/unity/high_score/
+            if (atsumaru) {
+                PlayerPrefsAtsumaru.SetInt("HighScore", score);//scoreをPrefsにセーブ
+                PlayerPrefsAtsumaru.Save();//
+                Atsumaru.scoreboards.setRecord("1", score.ToString());//スコア送信
+                Atsumaru.scoreboards.display("1");//https://goma980.blogspot.com/2021/03/webGLpg.html
+            } else { }
+                PlayerPrefs.SetInt("HighScore", score);//scoreをPrefsにセーブ
+                PlayerPrefs.Save();//https://futabazemi.net/unity/high_score/}
         }
         yield return null;
     }
