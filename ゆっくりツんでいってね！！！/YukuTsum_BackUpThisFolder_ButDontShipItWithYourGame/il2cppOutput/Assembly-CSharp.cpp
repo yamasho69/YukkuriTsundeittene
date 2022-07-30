@@ -16464,37 +16464,37 @@ IL_002c:
 		// int addTime = 2 * (removeCount - 3) - 1; //4�ȏ�A��������Ǝc�莞�ԃ{�[�i�X�B4��1�b�A5��3�b�A6��5�b�c�Ƒ�����
 		int32_t L_17 = V_0;
 		V_2 = ((int32_t)il2cpp_codegen_subtract((int32_t)((int32_t)il2cpp_codegen_multiply((int32_t)2, (int32_t)((int32_t)il2cpp_codegen_subtract((int32_t)L_17, (int32_t)3)))), (int32_t)1));
-		// timeCount += addTime;
-		int32_t L_18 = __this->get_timeCount_12();
-		int32_t L_19 = V_2;
-		__this->set_timeCount_12(((int32_t)il2cpp_codegen_add((int32_t)L_18, (int32_t)L_19)));
 		// SpawnPointEffect(removeBalls[removeBalls.Count-1].transform.position, score);
-		List_1_t704724B962CF6005382C610663175BE693752D5D * L_20 = __this->get_removeBalls_6();
-		List_1_t704724B962CF6005382C610663175BE693752D5D * L_21 = __this->get_removeBalls_6();
+		List_1_t704724B962CF6005382C610663175BE693752D5D * L_18 = __this->get_removeBalls_6();
+		List_1_t704724B962CF6005382C610663175BE693752D5D * L_19 = __this->get_removeBalls_6();
+		NullCheck(L_19);
+		int32_t L_20;
+		L_20 = List_1_get_Count_mED876C00B350B9333120130A2EE72901165DA7CB_inline(L_19, /*hidden argument*/List_1_get_Count_mED876C00B350B9333120130A2EE72901165DA7CB_RuntimeMethod_var);
+		NullCheck(L_18);
+		Ball_tB960B03B3710B825AA3B6862E08BB100AC9ECE0D * L_21;
+		L_21 = List_1_get_Item_m4F68FBE6D04E11D8079444BED8FDED5BACD7080B_inline(L_18, ((int32_t)il2cpp_codegen_subtract((int32_t)L_20, (int32_t)1)), /*hidden argument*/List_1_get_Item_m4F68FBE6D04E11D8079444BED8FDED5BACD7080B_RuntimeMethod_var);
 		NullCheck(L_21);
-		int32_t L_22;
-		L_22 = List_1_get_Count_mED876C00B350B9333120130A2EE72901165DA7CB_inline(L_21, /*hidden argument*/List_1_get_Count_mED876C00B350B9333120130A2EE72901165DA7CB_RuntimeMethod_var);
-		NullCheck(L_20);
-		Ball_tB960B03B3710B825AA3B6862E08BB100AC9ECE0D * L_23;
-		L_23 = List_1_get_Item_m4F68FBE6D04E11D8079444BED8FDED5BACD7080B_inline(L_20, ((int32_t)il2cpp_codegen_subtract((int32_t)L_22, (int32_t)1)), /*hidden argument*/List_1_get_Item_m4F68FBE6D04E11D8079444BED8FDED5BACD7080B_RuntimeMethod_var);
-		NullCheck(L_23);
-		Transform_tA8193BB29D4D2C7EC04918F3ED1816345186C3F1 * L_24;
-		L_24 = Component_get_transform_mE8496EBC45BEB1BADB5F314960F1DF1C952FA11F(L_23, /*hidden argument*/NULL);
-		NullCheck(L_24);
-		Vector3_t65B972D6A585A0A5B63153CF1177A90D3C90D65E  L_25;
-		L_25 = Transform_get_position_m40A8A9895568D56FFC687B57F30E8D53CB5EA341(L_24, /*hidden argument*/NULL);
-		Vector2_tBB32F2736AEC229A7BFBCE18197EC0F6AC7EC2D9  L_26;
-		L_26 = Vector2_op_Implicit_mE407CAF7446E342E059B00AA9EDB301AEC5B7B1A_inline(L_25, /*hidden argument*/NULL);
-		int32_t L_27 = V_1;
-		GameSystem_SpawnPointEffect_m4EC757C806BC7A5661CBCB666CA0C89566CEEEB3(__this, L_26, L_27, /*hidden argument*/NULL);
+		Transform_tA8193BB29D4D2C7EC04918F3ED1816345186C3F1 * L_22;
+		L_22 = Component_get_transform_mE8496EBC45BEB1BADB5F314960F1DF1C952FA11F(L_21, /*hidden argument*/NULL);
+		NullCheck(L_22);
+		Vector3_t65B972D6A585A0A5B63153CF1177A90D3C90D65E  L_23;
+		L_23 = Transform_get_position_m40A8A9895568D56FFC687B57F30E8D53CB5EA341(L_22, /*hidden argument*/NULL);
+		Vector2_tBB32F2736AEC229A7BFBCE18197EC0F6AC7EC2D9  L_24;
+		L_24 = Vector2_op_Implicit_mE407CAF7446E342E059B00AA9EDB301AEC5B7B1A_inline(L_23, /*hidden argument*/NULL);
+		int32_t L_25 = V_1;
+		GameSystem_SpawnPointEffect_m4EC757C806BC7A5661CBCB666CA0C89566CEEEB3(__this, L_24, L_25, /*hidden argument*/NULL);
 		// if (addTime > 0) {
-		int32_t L_28 = V_2;
-		if ((((int32_t)L_28) <= ((int32_t)0)))
+		int32_t L_26 = V_2;
+		if ((((int32_t)L_26) <= ((int32_t)0)))
 		{
 			goto IL_00cd;
 		}
 	}
 	{
+		// timeCount += addTime;
+		int32_t L_27 = __this->get_timeCount_12();
+		int32_t L_28 = V_2;
+		__this->set_timeCount_12(((int32_t)il2cpp_codegen_add((int32_t)L_27, (int32_t)L_28)));
 		// SpawnTimeEffect(removeBalls[removeBalls.Count - 1].transform.position,addTime);
 		List_1_t704724B962CF6005382C610663175BE693752D5D * L_29 = __this->get_removeBalls_6();
 		List_1_t704724B962CF6005382C610663175BE693752D5D * L_30 = __this->get_removeBalls_6();

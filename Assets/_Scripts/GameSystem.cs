@@ -260,10 +260,10 @@ public class GameSystem : MonoBehaviour
             int score = removeCount * ParamsSO.Entity.scorePoint;
             AddScore(score);
             int addTime = 2 * (removeCount - 3) - 1; //4つ以上連結させると残り時間ボーナス。4つで1秒、5つで3秒、6つで5秒…と増える
-            timeCount += addTime; 
             SpawnPointEffect(removeBalls[removeBalls.Count-1].transform.position, score);
             //SoundManager.instance.PlaySE(SoundManager.SE.Destroy);
             if (addTime > 0) {
+                timeCount += addTime;
                 SpawnTimeEffect(removeBalls[removeBalls.Count - 1].transform.position,addTime);
             }
             //きえる　ボイス再生
