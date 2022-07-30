@@ -153,6 +153,8 @@ public class GameSystem : MonoBehaviour
         resultPanel.SetActive(true);
         if (score > highScore) {
             highScoreHyoji.SetActive(true);//highScoreが更新されていたら表示
+            PlayerPrefs.SetInt("HighScore", score);//scoreをPrefsにセーブ
+            PlayerPrefs.Save();//https://futabazemi.net/unity/high_score/
             if (atsumaru) {
                 PlayerPrefsAtsumaru.SetInt("HighScore", score);//scoreをPrefsにセーブ
                 PlayerPrefsAtsumaru.Save();//
@@ -161,14 +163,11 @@ public class GameSystem : MonoBehaviour
             } else if(onlineRanking){
                 // Type == Number の場合
                 naichilab.RankingLoader.Instance.SendScoreAndShowRanking(score);
-
                 // Type == Time の場合
                 var millsec = 123456;
                 var timeScore = new System.TimeSpan(0, 0, 0, 0, millsec);
                 naichilab.RankingLoader.Instance.SendScoreAndShowRanking(timeScore);
             }
-            PlayerPrefs.SetInt("HighScore", score);//scoreをPrefsにセーブ
-            PlayerPrefs.Save();//https://futabazemi.net/unity/high_score/}
         }
         yield return null;
     }
@@ -193,7 +192,7 @@ public class GameSystem : MonoBehaviour
 
     void Update()
     {
-        //ゲームオーバー字はドラッグでの処理を行わない
+        //ゲームオーバー時はドラッグでの処理を行わない
         if (gameOver) {
             return;
         }
